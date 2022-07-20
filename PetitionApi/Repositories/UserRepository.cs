@@ -35,19 +35,26 @@ namespace PetitionApi.Repositories
 
         public User CreateUser(UserRegistration reg)
         {
-            User user = new User
+            try
             {
-                LastName = reg.LastName,
-                FirstName = reg.FirstName,
-                Email = reg.Email,
-                Password = reg.Password,
-            };
+                User user = new User
+                {
+                    LastName = reg.LastName,
+                    FirstName = reg.FirstName,
+                    Email = reg.Email,
+                    Password = reg.Password,
+                };
 
-            _context.Add(user);
+                _context.Add(user);
 
-            _context.SaveChanges();
+                _context.SaveChanges();
 
-            return _context.Users.First(x => x.Email == reg.Email);
+                return _context.Users.First(x => x.Email == reg.Email);
+            }catch(Exception)
+            {
+             throw;
+            }
+
         }
     }
 }

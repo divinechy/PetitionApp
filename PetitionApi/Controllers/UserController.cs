@@ -77,16 +77,36 @@ public class UserController : ControllerBase
     [HttpPost("/api/[controller]/[action]")]
     public IResult CreateUser([FromBody] UserRegistration reg)
     {
-        if (!string.IsNullOrEmpty(reg.Email) && !string.IsNullOrEmpty(reg.Password) && !string.IsNullOrEmpty(reg.LastName))
+        try
         {
-            var createdUser = _userRepo.CreateUser(reg);
+            if (!string.IsNullOrEmpty(reg.Email) && !string.IsNullOrEmpty(reg.Password) && !string.IsNullOrEmpty(reg.LastName))
+            {
+                var createdUser = _userRepo.CreateUser(reg);
 
-            if (createdUser is null) return Results.NotFound("User Not found");
+                if (createdUser is null) return Results.NotFound("User Not found");
 
-            return Results.Created("User created successfully", createdUser);
+                return Results.Created("User created successfully", createdUser);
+            }
+
+            return Results.BadRequest("Invalid Credentials");
         }
-
-        return Results.BadRequest("Invalid Credentials");
+        catch (Exception e)
+        {
+            if(e.InnerException != null)
+            {
+                if (e.InnerException.Message.Contains("Violation of UNIQUE KEY"))
+                {
+                    return Results.Conflict("The Email you are trying to register with, is already in use");
+                }
+                return Results.Problem();
+            }
+            else
+            {
+                return Results.Problem();
+            } 
+            
+        }
+       
     }
 
     [HttpGet("/api/[controller]/[action]/{Email}")]
