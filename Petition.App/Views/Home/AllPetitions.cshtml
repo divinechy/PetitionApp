@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Petition.App.Models.Dtos.PetitionDto>
+
+<br />
+<br />
+<div class="container p-4 border">
+    <div class="row pb-2">
+        <div class="col">
+            <h1 class="text-primary">Petition List</h1>
+        </div>
+        <div class="col text-end pt-1">
+            <a asp-action="CreatePetition" class="btn btn-outline-info"><i class="fas fa-plus"></i>  Create New Petition</a>
+        </div>
+    </div>
+    @if(Model == null)
+{
+        <div class="alert alert-warning" role="alert">You have not create any petition, Kindly click on the create new petition button.</div>
+    }
+    else
+    {
+         <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Title
+                </th>
+                 <th>
+                   Description
+                </th>
+                 <th>
+                    Total Signed
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                     <td>@item.Description</td>
+                     <td>@item.TotalCount</td>
+                      <td>
+                          <a asp-action="PetitionDelete" class="btn btn-danger" asp-route-petitionId="@item.PetitionId"><i class="fas fa-trash"></i></a>
+                      </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+    }
+   
+</div>

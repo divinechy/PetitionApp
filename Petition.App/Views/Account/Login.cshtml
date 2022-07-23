@@ -1,0 +1,94 @@
+﻿
+<div class="login-page">
+    <div class="lead">
+        <h1>Login</h1>
+        <p>Choose how to login</p>
+    </div>
+
+    <div class="row">
+
+          <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Local Account</h2>
+                    </div>
+
+                    <div class="card-body">
+                        <form>
+
+                            <div class="form-group">
+                                <label for="Email"></label>
+                                <input id="txtEmail" class="form-control" placeholder="Email" for="Email" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <label for="Password"></label>
+                                <input type="password" id="txtPassword" class="form-control" placeholder="Password" for="Password" autocomplete="off">
+                            </div>
+                             <br/>
+                            <submit id="BtnLogin" class="btn btn-primary" name="button" value="login">Login</submit>
+                            <button class="btn btn-secondary" name="button" value="cancel">Cancel</button>
+                        </form>
+                    </div>
+                    <div>
+                        <a href="@Url.Action("Register", new {})">New User? Register</a>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#BtnLogin").click(function (event) {
+    try {
+        debugger;
+        $('#BtnLogin').attr('disabled', true);
+        AddLoader('BtnLogin');;
+        let email = $("#txtEmail").val();
+        let password = $("#txtPassword").val();
+        if (email == "" ) {
+            toastr.warning("Email is required");
+            $('#BtnRegister').attr('disabled', false);
+            RemoveLoader();
+            RemoveLoader();
+            return false;
+
+        }
+        else if (password == "") {
+            toastr.warning("Password is required");
+            $('#BtnRegister').attr('disabled', false);
+            RemoveLoader();
+            RemoveLoader();
+            return false;
+        }
+        else {
+            let url = "/Account/Login";
+            var loginModel = { Email: email, Password: password };
+            ajaxAsync(url, JSON.stringify(loginModel), 'POST', LoginResponse, true);
+            event.preventDefault();
+            return false;
+        }
+
+
+    } catch (ex) {
+        toastr.error(ex.Message)
+        $('#BtnRegister').attr('disabled', false);
+        RemoveLoader();
+        RemoveLoader();
+    }
+
+    function LoginResponse(data){
+        console.log(data);
+        if (data.isSuccess) {
+             toastr.success(data.displayMessage);
+             window.location.href = "https://localhost:7223/";
+             RemoveLoader();
+             RemoveLoader();
+        }
+        else{
+            toastr.success(data.displayMessage);
+             $('#BtnRegister').attr('disabled', false);
+             RemoveLoader();
+             RemoveLoader();
+        }
+    }
+});
+</script>

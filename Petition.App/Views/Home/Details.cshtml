@@ -1,0 +1,98 @@
+﻿@model Petition.App.Models.Dtos.PetitionDto
+@if(@ViewBag.ErrorMsg != null)
+{
+     <div class="alert alert-warning" role="alert">@ViewBag.ErrorMsg</div>
+ }
+    
+<form method="post">
+    <input asp-for="PetitionId" hidden/>
+     <input asp-for="TotalCount" hidden/>
+     <input id="title" asp-for="Title" hidden/>
+     <input id="desc" asp-for="Description" hidden/>
+    <div class=" pt-4">
+        <div class="card container" style="border:1px solid #808080;">
+            <div class="card-header bg-dark text-light row" style="border-radius: 0px;">
+                <div class="col-12 col-md-10">
+                    <h1 class="text-white">@Model.Title</h1>
+                </div>
+                <div class="col-12 col-md-2 text-end">
+                    <h1 class="text-warning">(@Model.TotalCount)</h1>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="container rounded p-2">
+                    <div class="row">
+                        <div class="col-12 col-lg-4 p-1 text-center">
+                            <img src="@Model.ImageUrl" style="border-radius:35px;" width="100%" class="rounded" />
+                        </div>
+                        <div class="col-12 col-lg-8">
+                            <div class="row pl-3">
+
+                                <div class="col-12">
+                                    @if(@Model.SignedName != null && @Model.SignedName.Count() > 0){
+                                    @foreach(var name in Model.SignedName)
+                                    {
+                                         <span class="badge badge-primary text-success p-3 border">@name</span>
+                                    }
+                                    }
+                                    <h3 class="text-success"></h3>
+                                    <p class="text-secondary">@Html.Raw(Model.Description)</p>
+                                </div>
+                            </div>
+                            <div class="row px-4">
+                                <input asp-for="SignedMsg" type="text" placeholder="I'm signing because... (optional)" class="form-control" />
+                                <span asp-validation-for="SignedMsg" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer row bg-dark">
+                    <div class="col-12 col-md-6 pb-1 ">
+                        <span class="text-warning">Share via :-</span>
+                        <span class="badge badge-primary text-danger p-3 border"><a onclick="shareOnLinked()">LinkedIn</a></span>
+                         <span class="badge badge-primary text-secondary p-3 border"><a onclick="shareOnFaceBook()">FaceBook</a></span>
+                          <span class="badge badge-primary text-success p-3 border"><a  onclick="shareOnTwitter()">Twitter</a></span>
+                        @*<span class="badge badge-primary text-success p-3 border">@name</span>
+                        <span class="badge badge-primary text-success p-3 border">@name</span>*@
+                    </div>
+                    <div class="col-12 col-md-6 ">
+
+
+                        <button type="submit" class="btn btn-primary form-control btn-lg" style="height:50px;">Sign this petition</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial"/>
+}
+<script type="text/javascript">
+
+    function shareOnLinked()
+    {
+        debugger;
+      let txtTitle =  $('#title').val();
+      let txtDesc =  $('#desc').val();
+      let url = "https://localhost:7223/";
+     window.open('http://www.linkedin.com/shareArticle?mini=true&url='+ url +'&title='+txtTitle+'&summary='+txtDesc);
+    }
+
+    function shareOnFaceBook()
+    {
+        debugger;
+      let txtTitle =  $('#title').val();
+      let txtDesc =  $('#desc').val();
+      let url = "https://localhost:7223/";
+     window.open('http://www.facebook.com/shareArticle?mini=true&url='+ url +'&title='+txtTitle+'&summary='+txtDesc);
+    }
+    function shareOnTwitter()
+    {
+        debugger;
+      let txtTitle =  $('#title').val();
+      let txtDesc =  $('#desc').val();
+      let url = "https://localhost:7223/";
+     window.open('http://www.twitter.com/shareArticle?mini=true&url='+ url +'&title='+txtTitle+'&summary='+txtDesc);
+    }
+ </script>
