@@ -1,0 +1,121 @@
+﻿
+<div class="login-page justify-content-sm-center">
+    <div class="lead">
+        <h1>Register</h1>
+        <p>Choose how to register</p>
+    </div>
+    <div class="row text-center">
+
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Local Account Register</h2>
+                </div>
+
+                <div class="card-body">
+                    <form>
+
+                        <div class="form-group">
+                            <label for="Username"></label>
+                            <input class="form-control" id="txtUsername" placeholder="Username" for="Username" autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label for="Email"></label>
+                            <input class="form-control" id="txtEmail" placeholder="Email" for="Email" autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label for="FirstName"></label>
+                            <input class="form-control" id="txtFirstname" placeholder="Firstname" for="FirstName" autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label for="LastName"></label>
+                            <input class="form-control" id="txtLastname" placeholder="Lastname" for="LastName" autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label for="Password"></label>
+                            <input type="password" class="form-control" id="txtPassword" placeholder="Password" for="Password" autocomplete="off">
+                        </div>
+                        <br/>
+                        <submit id="BtnRegister" class="btn btn-primary" name="button" value="Register">Register</submit>
+                        <button class="btn btn-secondary" name="button" value="cancel">Cancel</button>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Action("Login",new { })">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //Onclick event of the Register button
+    $("#BtnRegister").click(function (event) {
+    try {
+        //Disable the login button when user click the button (This will avoid user clicking the button multiple time)
+        $('#BtnRegister').attr('disabled', true);
+         //Initiate the loading while the request is been sent to the API
+        AddLoader('BtnRegister');
+        let username = $("#txtUsername").val();
+        let email = $("#txtEmail").val();
+        let firstName = $("#txtFirstname").val();
+        let lastName = $("#txtLastname").val();
+        let password = $("#txtPassword").val();
+        let roleName = $("#txtRoleName").val();
+         //Validate the Email input
+        if (email == "" ) {
+            toastr.warning("Email is required");
+            $('#BtnRegister').attr('disabled', false);
+            RemoveLoader();
+            RemoveLoader();
+            return false;
+
+        }
+        //Validate the Password input
+        else if (password == "") {
+            toastr.warning("Password is required");
+            $('#BtnRegister').attr('disabled', false);
+            RemoveLoader();
+            RemoveLoader();
+            return false;
+        }
+        else {
+            let url = "/Account/Register";
+            //Construt the login Model 
+            var registerModel = {
+                Username: username, Email: email, FirstName: firstName, LastName: lastName,
+                Password: password, RoleName: roleName
+            };
+            //Generic Ajax method that process all the HTTP request on the system
+            ajaxAsync(url, JSON.stringify(registerModel), 'POST', RegisterResponse, true);
+            event.preventDefault();
+            return false;
+        }
+
+
+    } catch (ex) {
+         //Catch exepetion handler
+        toastr.error(ex.Message)
+        $('#BtnRegister').attr('disabled', false);
+        RemoveLoader();
+        RemoveLoader();
+    }
+
+    function RegisterResponse(data){
+         //Callback function that is called when th response return from the API
+        console.log(data);
+        if (data.isSuccess) {
+             toastr.success(data.displayMessage);
+             window.location.href = "https://localhost:7223/Account/Login";
+             RemoveLoader();
+            RemoveLoader();
+        }
+        else{
+            toastr.success(data.displayMessage);
+             $('#BtnRegister').attr('disabled', false);
+             RemoveLoader();
+             RemoveLoader();
+        }
+    }
+});
+</script>

@@ -23,7 +23,7 @@ namespace PetitionApi.Controllers
 
         //for roles, 1 is admin and 2 is user
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "1, 2")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "1, 2")]
         [HttpGet("/api/[controller]/[action]")]
         public IResult GetPetitions()
         {

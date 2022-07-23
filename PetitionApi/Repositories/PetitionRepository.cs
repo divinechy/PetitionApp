@@ -120,14 +120,15 @@ namespace PetitionApi.Repositories
             {
                CreatedBy = petitionDTO.CreatedBy,
                Name = petitionDTO.Name,
-               Details = petitionDTO.Details
+               Details = petitionDTO.Details,
+               CreatedDate = DateTime.Now
             };
 
             _context.Add(petition);
 
             _context.SaveChanges();
 
-            return _context.Petitions.Last();
+            return _context.Petitions.OrderByDescending(c=>c.PetitionId).FirstOrDefault();
         }
 
         public UserPetition? SignPetition(SignPetitionDTO signDTO)
@@ -147,13 +148,14 @@ namespace PetitionApi.Repositories
                     SignedBy = signDTO.SignedBy,
                     SignedEmail = signDTO.SignedEmail,
                     Remarks = signDTO.Remarks,
-                    PetitionId = signDTO.PetitionId
+                    PetitionId = signDTO.PetitionId,
+                    SignedDate = DateTime.Now
                 };
                 _context.Add(userPetition);
 
                 _context.SaveChanges();
 
-                return _context.UserPetitions.Last();
+                return _context.UserPetitions.OrderByDescending(c=>c.UserPetitionId).FirstOrDefault();
             }
            
         }

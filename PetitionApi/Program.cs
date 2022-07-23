@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PetitionApi.Interfaces;
@@ -10,7 +11,10 @@ using PetitionApi.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+//Get connection info from the application config file
+var connSection = builder.Configuration.GetSection("ConnectionStrings");
+//Invoke the DB context with the Enttity framework core Library.
+builder.Services.AddDbContext<PetitionDbContext>(options => options.UseSqlServer(connSection["PetitionDb"]));
 builder.Services.AddControllers();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

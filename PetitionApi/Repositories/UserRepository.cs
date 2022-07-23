@@ -42,6 +42,8 @@ namespace PetitionApi.Repositories
                     LastName = reg.LastName,
                     FirstName = reg.FirstName,
                     Email = reg.Email,
+                    RoleId = 2,
+                    CreatedDate = DateTime.Now,
                     Password = reg.Password,
                 };
 
